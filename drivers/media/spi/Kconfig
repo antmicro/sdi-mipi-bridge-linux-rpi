@@ -15,6 +15,16 @@ config VIDEO_GS1662
 	help
 	  Enable the GS1662 driver which serializes video streams.
 
+config VIDEO_GS2971A
+	tristate "Semtech GS2971A support"
+	depends on SPI && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	help
+	  This is a Video4Linux2 sensor-level driver for Semtech GS2971A
+	  deserializer.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called gs2971a.
+
 endmenu
 
 endif
