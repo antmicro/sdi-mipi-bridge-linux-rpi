@@ -243,4 +243,11 @@ config FPGA_MGR_VERSAL_FPGA
 	  configure the programmable logic(PL).
 
 	  To compile this as a module, choose M here.
+
+config FPGA_MGR_CROSSLINK
+	tristate "Lattice Crosslink FPGA"
+	depends on OF && I2C
+	help
+	  FPGA manager driver support for Lattice CrossLink FPGAs over i2c.
+
 endif # FPGA
