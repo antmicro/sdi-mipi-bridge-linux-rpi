@@ -593,6 +593,7 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
 	adap->dev.parent = &pdev->dev;
 	adap->dev.of_node = pdev->dev.of_node;
 	adap->quirks = of_device_get_match_data(&pdev->dev);
+	adap->timeout = 12000;
 
 	/*
 	 * Disable the hardware clock stretching timeout. SMBUS
