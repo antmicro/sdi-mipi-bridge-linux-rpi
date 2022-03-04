@@ -283,12 +283,19 @@ static int gs2971a_probe(struct spi_device *spi)
 
 	priv->pad.flags = MEDIA_PAD_FL_SOURCE;
 	sd->entity.ops = &gs2971a_media_ops;
+	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+	ret = media_entity_pads_init(&sd->entity, 1, &priv->pad);
+	if (ret < 0)
+		goto ctrl_handler_free;
 
 	ret = v4l2_async_register_subdev(sd);
 	if (ret < 0)
 		return ret;
 
 	dev_info(&spi->dev, "sensor %s registered\n", sd->name);
+
+ctrl_handler_free:
+	v4l2_ctrl_handler_free(&priv->hdl);
 
 	return 0;
 }
