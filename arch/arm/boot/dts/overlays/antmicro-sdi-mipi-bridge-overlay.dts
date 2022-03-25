@@ -1,0 +1,95 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Definitions for Antmicro SDI to MIPI bridge on VC I2C bus
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+/{
+	compatible = "brcm,bcm2835";
+
+	i2c_frag: fragment@0 {
+		target = <&i2c_csi_dsi>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+
+			sc18is603: spi@28 {
+				compatible = "nxp,sc18is602b";
+				reg = <0x28>;
+
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				nxp,spi-cs-as-gpios = <0 0 1 0>;
+				gpio-controller;
+				#gpio-cells = <2>;
+
+				gs2971a@0 {
+					status = "okay";
+					devnode = "video0";
+					compatible = "semtech,gs2971a";
+					reg = <0x0>;
+					spi-max-frequency = <20000000>;
+
+					port {
+						gs2971a_out0: endpoint {
+							remote-endpoint = <&csi1_ep>;
+							data-lanes = <1 2 3 4>;
+						};
+					};
+				};
+			};
+			fpga0: lattice-crosslink@40 {
+				compatible = "lattice,crosslink-fpga-mgr";
+				reg = <0x40>;
+				reset-gpios = <&sc18is603 2 GPIO_ACTIVE_LOW>;
+			};
+		};
+	};
+
+	csi_frag: fragment@1 {
+		target = <&csi1>;
+		csi: __overlay__ {
+			status = "okay";
+
+			port {
+				csi1_ep: endpoint {
+					remote-endpoint = <&gs2971a_out0>;
+					data-lanes = <1 2 3 4>;
+				};
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&i2c0if>;
+		__overlay__ {
+			status = "okay";
+			clock-frequency = <400000>;
+		};
+	};
+
+	fragment@3 {
+		target = <&i2c0mux>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	reg_frag: fragment@4 {
+		target = <&cam1_reg>;
+		__overlay__ {
+			startup-delay-us = <20000>;
+		};
+	};
+
+	clk_frag: fragment@5 {
+		target = <&cam1_clk>;
+		__overlay__ {
+			status = "okay";
+			clock-frequency = <25000000>;
+		};
+	};
+};

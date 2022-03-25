@@ -197,6 +197,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
 	sc16is752-spi1.dtbo \
 	sdhost.dtbo \
 	sdio.dtbo \
+	antmicro-sdi-mipi-bridge.dtbo \
 	seeed-can-fd-hat-v1.dtbo \
 	seeed-can-fd-hat-v2.dtbo \
 	sh1106-spi.dtbo \
